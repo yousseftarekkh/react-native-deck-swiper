@@ -4,10 +4,9 @@ import ViewOverflow from "react-native-view-overflow";
 import isEqual from "lodash/isEqual";
 import styles from "../styles";
 import { calculateCardIndexes, rebuildStackAnimatedValues } from "utils";
-
+const { createAnimatedComponent } = Animated;
+const AnimatedView = createAnimatedComponent(View);
 const { height, width } = Dimensions.get("window");
-
-const SWIPE_MULTIPLY_FACTOR = 4.5;
 
 class Swiper extends Component {
   constructor(props) {
@@ -775,14 +774,14 @@ class Swiper extends Component {
     const swipableCardStyle = this.calculateSwipableCardStyle();
     const renderOverlayLabel = this.renderOverlayLabel();
     renderedCards.push(
-      <Animated.View
+      <AnimatedView
         key={key}
         style={firstCard ? swipableCardStyle : stackCardZoomStyle}
         {...this._panResponder.panHandlers}
       >
         {firstCard ? renderOverlayLabel : null}
         {stackCard}
-      </Animated.View>
+      </AnimatedView>
     );
   };
 
@@ -860,189 +859,16 @@ class Swiper extends Component {
     }
 
     return (
-      <Animated.View style={this.calculateOverlayLabelWrapperStyle()}>
+      <AnimatedView style={this.calculateOverlayLabelWrapperStyle()}>
         {!overlayLabels[labelType].element && (
           <Text style={this.calculateOverlayLabelStyle()}>
             {overlayLabels[labelType].title}
           </Text>
         )}
-
         {overlayLabels[labelType].element && overlayLabels[labelType].element}
-      </Animated.View>
+      </AnimatedView>
     );
   };
 }
-
-// Swiper.propTypes = {
-//   animateCardOpacity: PropTypes.bool,
-//   animateOverlayLabelsOpacity: PropTypes.bool,
-//   backgroundColor: PropTypes.string,
-//   cardHorizontalMargin: PropTypes.number,
-//   cardIndex: PropTypes.number,
-//   cardStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-//   cardVerticalMargin: PropTypes.number,
-//   cards: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-//   containerStyle: PropTypes.object,
-//   children: PropTypes.any,
-//   childrenOnTop: PropTypes.bool,
-//   dragEnd: PropTypes.func,
-//   dragStart: PropTypes.func,
-//   disableBottomSwipe: PropTypes.bool,
-//   disableLeftSwipe: PropTypes.bool,
-//   disableRightSwipe: PropTypes.bool,
-//   disableTopSwipe: PropTypes.bool,
-//   goBackToPreviousCardOnSwipeBottom: PropTypes.bool,
-//   goBackToPreviousCardOnSwipeLeft: PropTypes.bool,
-//   goBackToPreviousCardOnSwipeRight: PropTypes.bool,
-//   goBackToPreviousCardOnSwipeTop: PropTypes.bool,
-//   horizontalSwipe: PropTypes.bool,
-//   horizontalThreshold: PropTypes.number,
-//   infinite: PropTypes.bool,
-//   inputCardOpacityRangeX: PropTypes.array,
-//   inputCardOpacityRangeY: PropTypes.array,
-//   inputOverlayLabelsOpacityRangeX: PropTypes.array,
-//   inputOverlayLabelsOpacityRangeY: PropTypes.array,
-//   inputCardOpacityRange: PropTypes.array,
-//   inputRotationRange: PropTypes.array,
-//   keyExtractor: PropTypes.func,
-//   marginBottom: PropTypes.number,
-//   marginTop: PropTypes.number,
-//   onSwiped: PropTypes.func,
-//   onSwipedAborted: PropTypes.func,
-//   onSwipedAll: PropTypes.func,
-//   onSwipedBottom: PropTypes.func,
-//   onSwipedLeft: PropTypes.func,
-//   onSwipedRight: PropTypes.func,
-//   onSwipedTop: PropTypes.func,
-//   onSwiping: PropTypes.func,
-//   onTapCard: PropTypes.func,
-//   onTapCardDeadZone: PropTypes.number,
-//   outputCardOpacityRangeX: PropTypes.array,
-//   outputCardOpacityRangeY: PropTypes.array,
-//   outputOverlayLabelsOpacityRangeX: PropTypes.array,
-//   outputOverlayLabelsOpacityRangeY: PropTypes.array,
-//   outputRotationRange: PropTypes.array,
-//   outputCardOpacityRange: PropTypes.array,
-//   overlayLabels: PropTypes.object,
-//   overlayLabelStyle: PropTypes.object,
-//   overlayLabelWrapperStyle: PropTypes.object,
-//   overlayOpacityHorizontalThreshold: PropTypes.number,
-//   overlayOpacityVerticalThreshold: PropTypes.number,
-//   pointerEvents: PropTypes.oneOf(["box-none", "none", "box-only", "auto"]),
-//   previousCardDefaultPositionX: PropTypes.number,
-//   previousCardDefaultPositionY: PropTypes.number,
-//   renderCard: PropTypes.func.isRequired,
-//   secondCardZoom: PropTypes.number,
-//   showSecondCard: PropTypes.bool,
-//   stackAnimationFriction: PropTypes.number,
-//   stackAnimationTension: PropTypes.number,
-//   stackScale: PropTypes.number,
-//   stackSeparation: PropTypes.number,
-//   stackSize: PropTypes.number,
-//   swipeAnimationDuration: PropTypes.number,
-//   swipeBackCard: PropTypes.bool,
-//   topCardResetAnimationFriction: PropTypes.number,
-//   topCardResetAnimationTension: PropTypes.number,
-//   useViewOverflow: PropTypes.bool,
-//   verticalSwipe: PropTypes.bool,
-//   verticalThreshold: PropTypes.number,
-//   zoomAnimationDuration: PropTypes.number,
-//   zoomFriction: PropTypes.number,
-// };
-
-Swiper.defaultProps = {
-  animateCardOpacity: false,
-  animateOverlayLabelsOpacity: false,
-  backgroundColor: "#4FD0E9",
-  cardHorizontalMargin: 20,
-  cardIndex: 0,
-  cardStyle: {},
-  cardVerticalMargin: 60,
-  childrenOnTop: false,
-  containerStyle: {},
-  disableBottomSwipe: false,
-  disableLeftSwipe: false,
-  disableRightSwipe: false,
-  disableTopSwipe: false,
-  horizontalSwipe: true,
-  horizontalThreshold: width / 4,
-  goBackToPreviousCardOnSwipeBottom: false,
-  goBackToPreviousCardOnSwipeLeft: false,
-  goBackToPreviousCardOnSwipeRight: false,
-  goBackToPreviousCardOnSwipeTop: false,
-  infinite: false,
-  inputCardOpacityRangeX: [-width / 2, -width / 3, 0, width / 3, width / 2],
-  inputCardOpacityRangeY: [-height / 2, -height / 3, 0, height / 3, height / 2],
-  inputOverlayLabelsOpacityRangeX: [
-    -width / 3,
-    -width / 4,
-    0,
-    width / 4,
-    width / 3,
-  ],
-  inputOverlayLabelsOpacityRangeY: [
-    -height / 4,
-    -height / 5,
-    0,
-    height / 5,
-    height / 4,
-  ],
-  inputRotationRange: [-width / 2, 0, width / 2],
-  keyExtractor: null,
-  marginBottom: 0,
-  marginTop: 0,
-  onSwiped: (cardIndex) => {},
-  onSwipedAborted: () => {},
-  onSwipedAll: () => {},
-  onSwipedBottom: (cardIndex) => {},
-  onSwipedLeft: (cardIndex) => {},
-  onSwipedRight: (cardIndex) => {},
-  onSwipedTop: (cardIndex) => {},
-  onSwiping: () => {},
-  onTapCard: (cardIndex) => {},
-  onTapCardDeadZone: 5,
-  outputCardOpacityRangeX: [0.8, 1, 1, 1, 0.8],
-  outputCardOpacityRangeY: [0.8, 1, 1, 1, 0.8],
-  outputOverlayLabelsOpacityRangeX: [1, 0, 0, 0, 1],
-  outputOverlayLabelsOpacityRangeY: [1, 0, 0, 0, 1],
-  outputRotationRange: ["-10deg", "0deg", "10deg"],
-  overlayLabels: null,
-  overlayLabelStyle: {
-    fontSize: 45,
-    fontWeight: "bold",
-    borderRadius: 10,
-    padding: 10,
-    overflow: "hidden",
-  },
-  overlayLabelWrapperStyle: {
-    position: "absolute",
-    backgroundColor: "transparent",
-    zIndex: 2,
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-  overlayOpacityHorizontalThreshold: width / 4,
-  overlayOpacityVerticalThreshold: height / 5,
-  pointerEvents: "auto",
-  previousCardDefaultPositionX: -width,
-  previousCardDefaultPositionY: -height,
-  secondCardZoom: 0.97,
-  showSecondCard: true,
-  stackAnimationFriction: 7,
-  stackAnimationTension: 40,
-  stackScale: 3,
-  stackSeparation: 10,
-  stackSize: 1,
-  swipeAnimationDuration: 350,
-  swipeBackCard: false,
-  topCardResetAnimationFriction: 7,
-  topCardResetAnimationTension: 40,
-  useViewOverflow: true,
-  verticalSwipe: true,
-  verticalThreshold: height / 5,
-  zoomAnimationDuration: 100,
-  zoomFriction: 7,
-};
 
 export default Swiper;

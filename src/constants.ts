@@ -5,3 +5,5 @@ enum DIRECTIONS {
   RIGHT = "right",
   LEFT = "left",
 }
+
+const SWIPE_MULTIPLY_FACTOR = 4.5;
